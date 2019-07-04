@@ -38,7 +38,11 @@ function addPhraseToDisplay(phraseCharArr) {
         const letter = phraseCharArr[i];
         if (letter.match(/[a-z]/i)) {
             li.classList.add('letter');
+        } 
+        else if (letter.match(/[\s]/)) {
+            li.classList.add('space');
         }
+
         ul.appendChild(li);
     }     
 }
