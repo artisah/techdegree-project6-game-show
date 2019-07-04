@@ -1,8 +1,9 @@
-const qwerty = document.querySelector('#qwerty');
+const qwertyKey = document.querySelector('#qwerty');
 const phrase = document.querySelector('#phrase');
 const btnResetGame = document.querySelector('.btn__reset');
 const startGameOverlay = document.querySelector('#overlay');
 const ul = document.querySelector('#phrase ul');
+
 //To track no. of Times user missed guessing correct letter.
 var missed = 0; 
 const phrases = [
@@ -13,10 +14,7 @@ const phrases = [
     "your guess is as good as mine"
 ]; 
 
-//to hide the start screen overlay
-btnResetGame.addEventListener('click', function() {
-    startGameOverlay.style.display = 'none';
-});
+
 
 // function to select a phrase and return the new character array.
 function getRandomPhraseAsArray(phraseArr) {
@@ -45,19 +43,64 @@ function addPhraseToDisplay(phraseCharArr) {
     }     
 }
 
-//Compare user click with letter of phrases.
+//compare user click with letter of phrases.
 function checkLetter(btnGuesss) {
-  const gg = 'a';
-
+    let phraseLetter = '';
+//   extract button text from button element.
+  const letterBtnGuess = btnGuesss.textContent;
   //loop throught all lis.
   const lis = ul.querySelectorAll('li');
   for(let i = 0; i < lis.length; i++ ) {
-      const lisLetterClass = lis[i].getAttribute("class");
+     const attrValue = (lis[i].getAttribute('class'));
 
-
+     if (attrValue === "letter") {
+        
+         phraseLetter = lis[i].textContent;
+         //  match found in pharse char with user selected char.
+         if (lis[i].textContent === letterBtnGuess) {
+             lis[i].classList.add("show");
+         } 
+     } 
   }
+  
+    if (phraseLetter !== undefined && phraseLetter !== null) {
+        return phraseLetter;
+    }
+    //  no match found
+    else {
+        return null;
+    }
+  
+
 }
+
+// ************************************ //
+//  Events and events delegations
+// ************************************ //
+
+//to hide the start screen overlay
+btnResetGame.addEventListener('click', function() {
+    startGameOverlay.style.display = 'none';
+});
+
+
+// Keypress Event on qwery keyboard
+
+qwertyKey.addEventListener("click", function(event) {
+    if (event.target.matches('button')) {
+        const selecteBtn = event.target;
+        selecteBtn.classList.add('chosen');
+        
+        //selecteBtn.disabled = true;
+
+        const letterFound = checkLetter(selecteBtn);
+
+    }
+
+})
 
 const phraseArray = getRandomPhraseAsArray(phrases);
 console.log(phraseArray);
 addPhraseToDisplay(phraseArray);
+
+
