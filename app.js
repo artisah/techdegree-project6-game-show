@@ -3,9 +3,11 @@ const phrase = document.querySelector('#phrase');
 const btnResetGame = document.querySelector('.btn__reset');
 const startGameOverlay = document.querySelector('#overlay');
 const ul = document.querySelector('#phrase ul');
-
+//const scoreboard = document.querySelector('#scoreboard');
+const ol = document.querySelector('#scoreboard ol');
 //To track no. of Times user missed guessing correct letter.
 var missed = 0; 
+
 const phrases = [
     "a friend in need is a friend indeed",
     "do not count your chickens before the eggs have hatched",
@@ -15,6 +17,9 @@ const phrases = [
 ]; 
 
 
+// ************************************ //
+//  functions
+// ************************************ //
 
 // function to select a phrase and return the new character array.
 function getRandomPhraseAsArray(phraseArr) {
@@ -36,45 +41,53 @@ function addPhraseToDisplay(phraseCharArr) {
         
         
         const letter = phraseCharArr[i];
+        // add letter class to li.
         if (letter.match(/[a-z]/i)) {
             li.classList.add('letter');
         } 
+        // add space class to li.
         else if (letter.match(/[\s]/)) {
             li.classList.add('space');
         }
-
         ul.appendChild(li);
     }     
 }
 
 //compare user click with letter of phrases.
 function checkLetter(btnGuesss) {
-    let phraseLetter = '';
+  let phraseLetter = '';
+  let letterFound = false;
 //   extract button text from button element.
   const letterBtnGuess = btnGuesss.textContent;
   //loop throught all lis.
   const lis = ul.querySelectorAll('li');
   for(let i = 0; i < lis.length; i++ ) {
      const attrValue = (lis[i].getAttribute('class'));
+     phraseLetter = lis[i].textContent;
 
      if (attrValue === "letter") {
-        
-         phraseLetter = lis[i].textContent;
+         
          //  match found in pharse char with user selected char.
-         if (lis[i].textContent === letterBtnGuess) {
+         if (phraseLetter === letterBtnGuess) {
              lis[i].classList.add("show");
+             letterFound = true;
          } 
      } 
   }
-  
-    if (phraseLetter !== undefined && phraseLetter !== null) {
+   
+     if (letterFound) {
         return phraseLetter;
     }
     //  no match found
     else {
+        letterFound = false;
         return null;
     }
-  
+}
+
+//function to check whether player wins or lose  game.
+function checkWin() {
+    
 
 }
 
@@ -91,17 +104,25 @@ btnResetGame.addEventListener('click', function() {
 // Keypress Event on qwery keyboard
 
 qwertyKey.addEventListener("click", function(event) {
+
     if (event.target.matches('button')) {
         const selecteBtn = event.target;
         selecteBtn.classList.add('chosen');
         
-        //selecteBtn.disabled = true;
-
+        selecteBtn.disabled = true;
         const letterFound = checkLetter(selecteBtn);
 
-    }
+        //player has guessed the wrong letter
+        if (letterFound === null) {
+            missed += 1;
 
-})
+            // remove li containg Liveheart.png, if exists.
+            if (ol.hasChildNodes()) {
+                ol.removeChild(ol.childNodes[0]);
+              }  
+        }
+    }
+});
 
 const phraseArray = getRandomPhraseAsArray(phrases);
 console.log(phraseArray);
