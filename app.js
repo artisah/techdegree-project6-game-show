@@ -4,8 +4,17 @@ const btnResetGame = document.querySelector('.btn__reset');
 const startGameOverlay = document.querySelector('#overlay');
 const ul = document.querySelector('#phrase ul');
 const ol = document.querySelector('#scoreboard ol');
+const h3 = document.createElement('h3');
 //To track no. of Times user missed guessing correct letter.
 var missed = 0; 
+
+//Style for h3 element, to display win or lose text at end of game.
+h3.style.fontFamily = 'Open Sans', 'sans-serif';
+h3.style.fontSize = '30px';
+h3.style.textTransform = 'capitalize';
+h3.style.margin = 0;
+
+startGameOverlay.appendChild(h3);
 
 const phrases = [
     "all is well",
@@ -88,10 +97,30 @@ function checkLetter(btnGuesss) {
 //function to check whether player wins or lose  game.
 function checkWin() {
     // count no. of Lis with class letter.
-    const lisCountClassLetter = ul.querySelectorAll('.letter').length;
+    const lisCountClassLetter = ul.querySelectorAll('.letter');
     //  count no. of Lis with class show.
-    const lisCountClassShow = ul.querySelectorAll('.show').length;
+    const lisCountClassShow = ul.querySelectorAll('.show');
 
+    if (lisCountClassLetter.length === lisCountClassShow.length) {
+         gameWin();
+    } else if(missed >= 5){
+        gameLose();
+    }
+
+}
+
+function gameWin() {
+    startGameOverlay.style.display = '';
+    startGameOverlay.classList.add('win');
+    btnResetGame.textContent = 'Play Again'
+    h3.textContent = "You Win!"
+}
+
+function gameLose() {
+    startGameOverlay.style.display = '';
+    startGameOverlay.classList.add('lose');
+    btnResetGame.textContent = 'Try Again'
+    h3.textContent = "You Lose!"
 }
 
 // ************************************ //
@@ -122,12 +151,10 @@ qwertyKey.addEventListener("click", function(event) {
             const liveHeart = ol.querySelectorAll('li img[src="images/liveHeart.png"]');
             if (liveHeart.length > 0) {
                 liveHeart[0].setAttribute("src", "images/lostHeart.png");    
-            }
-              
+            }    
         }
     }
-
-   // checkWin();
+    checkWin();
 });
 
 const phraseArray = getRandomPhraseAsArray(phrases);
