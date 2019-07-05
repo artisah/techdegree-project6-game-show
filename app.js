@@ -3,17 +3,16 @@ const phrase = document.querySelector('#phrase');
 const btnResetGame = document.querySelector('.btn__reset');
 const startGameOverlay = document.querySelector('#overlay');
 const ul = document.querySelector('#phrase ul');
-//const scoreboard = document.querySelector('#scoreboard');
 const ol = document.querySelector('#scoreboard ol');
 //To track no. of Times user missed guessing correct letter.
 var missed = 0; 
 
 const phrases = [
-    "a friend in need is a friend indeed",
-    "do not count your chickens before the eggs have hatched",
-    "burn the midnight oil",
-    "kill two birds with one stone",
-    "your guess is as good as mine"
+    "all is well",
+    "shoot the moon",
+    "now or never",
+    "never give up",
+    "nobody is perfect"
 ]; 
 
 
@@ -56,7 +55,7 @@ function addPhraseToDisplay(phraseCharArr) {
 //compare user click with letter of phrases.
 function checkLetter(btnGuesss) {
   let phraseLetter = '';
-  let letterFound = false;
+  let guess = false;
 //   extract button text from button element.
   const letterBtnGuess = btnGuesss.textContent;
   //loop throught all lis.
@@ -70,24 +69,28 @@ function checkLetter(btnGuesss) {
          //  match found in pharse char with user selected char.
          if (phraseLetter === letterBtnGuess) {
              lis[i].classList.add("show");
-             letterFound = true;
+             guess = true;
          } 
      } 
   }
    
-     if (letterFound) {
+     if (guess) {
         return phraseLetter;
     }
     //  no match found
     else {
-        letterFound = false;
+        guess = false;
         return null;
     }
+
 }
 
 //function to check whether player wins or lose  game.
 function checkWin() {
-    
+    // count no. of Lis with class letter.
+    const lisCountClassLetter = ul.querySelectorAll('.letter').length;
+    //  count no. of Lis with class show.
+    const lisCountClassShow = ul.querySelectorAll('.show').length;
 
 }
 
@@ -104,24 +107,27 @@ btnResetGame.addEventListener('click', function() {
 // Keypress Event on qwery keyboard
 
 qwertyKey.addEventListener("click", function(event) {
-
+    const ol = document.querySelector('#scoreboard ol');
+   
     if (event.target.matches('button')) {
-        const selecteBtn = event.target;
-        selecteBtn.classList.add('chosen');
+        const selectBtn = event.target;
+        selectBtn.classList.add('chosen');
         
-        selecteBtn.disabled = true;
-        const letterFound = checkLetter(selecteBtn);
+        selectBtn.disabled = true;
+        const letterFound = checkLetter(selectBtn);
 
         //player has guessed the wrong letter
         if (letterFound === null) {
             missed += 1;
-
-            // remove li containg Liveheart.png, if exists.
-            if (ol.hasChildNodes()) {
-                ol.removeChild(ol.childNodes[0]);
-              }  
+            const liveHeart = ol.querySelectorAll('li img[src="images/liveHeart.png"]');
+            if (liveHeart.length > 0) {
+                liveHeart[0].setAttribute("src", "images/lostHeart.png");    
+            }
+              
         }
     }
+
+   // checkWin();
 });
 
 const phraseArray = getRandomPhraseAsArray(phrases);
