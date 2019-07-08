@@ -100,11 +100,11 @@ button {
 .show {
   color: #000;
   background-color: #76CE82;
-  transition: all .8s ease-in-out;
-  -webkit-transition: all .8s ease-in-out;
-  -moz-transition: all .8s ease-in-out;
-  -ms-transition: all .8s ease-in-out;
-  -o-transition: all .8s ease-in-out;
+  transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
 }
 
 /* Keyboard */

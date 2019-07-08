@@ -100,7 +100,7 @@ function createStyleHeading3() {
 
 function gameWin() {
    startGameOverlay.style.display = '';
-   title.style.zIndex = 100;
+   startGameOverlay.style.zIndex = 100;
    startGameOverlay.className = 'win';
    startGameOverlay.removeChild(btnResetGame);
    startGameOverlay.appendChild(startOver);
@@ -113,7 +113,7 @@ function gameWin() {
 
 function gameLose() {
     startGameOverlay.style.display = '';
-    title.style.zIndex = 100;
+    startGameOverlay.style.zIndex = 100;
     startGameOverlay.className = 'lose';
     startGameOverlay.removeChild(btnResetGame);
     startGameOverlay.appendChild(startOver);
