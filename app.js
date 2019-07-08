@@ -4,24 +4,18 @@ const btnResetGame = document.querySelector('.btn__reset');
 const startGameOverlay = document.querySelector('#overlay');
 const ul = document.querySelector('#phrase ul');
 const ol = document.querySelector('#scoreboard ol');
+const title = document.querySelector('.title');
 const h3 = document.createElement('h3');
-//To track no. of Times user missed guessing correct letter.
 var missed = 0; 
+let startOver = document.createElement('a');
 
-//Style for h3 element, to display win or lose text at end of game.
-h3.style.fontFamily = 'Open Sans', 'sans-serif';
-h3.style.fontSize = '30px';
-h3.style.textTransform = 'capitalize';
-h3.style.margin = 0;
 
-startGameOverlay.appendChild(h3);
 
 const phrases = [
     "all is well",
     "shoot the moon",
     "now or never",
     "never give up",
-    "nobody is perfect"
 ]; 
 
 
@@ -42,13 +36,13 @@ function getRandomPhraseAsArray(phraseArr) {
 
 //Function to create li node for ul.
 function addPhraseToDisplay(phraseCharArr) {
-    for (let i =0; i < phraseCharArr.length; i++ ) {
+
+    for (let i = 0; i < phraseCharArr.length; i++ ) {
         const li = document.createElement('li');
-        const liTextNode = document.createTextNode(phraseCharArr[i]);
-        li.appendChild(liTextNode);
-        
-        
         const letter = phraseCharArr[i];
+        li.textContent = letter;
+        ul.appendChild(li);
+        
         // add letter class to li.
         if (letter.match(/[a-z]/i)) {
             li.classList.add('letter');
@@ -56,72 +50,81 @@ function addPhraseToDisplay(phraseCharArr) {
         // add space class to li.
         else if (letter.match(/[\s]/)) {
             li.classList.add('space');
-        }
-        ul.appendChild(li);
+        }    
     }     
 }
 
 //compare user click with letter of phrases.
 function checkLetter(btnGuesss) {
-  let phraseLetter = '';
-  let guess = false;
-//   extract button text from button element.
+  let guess = null;
+  const lis = ul.children;
   const letterBtnGuess = btnGuesss.textContent;
-  //loop throught all lis.
-  const lis = ul.querySelectorAll('li');
+  
   for(let i = 0; i < lis.length; i++ ) {
      const attrValue = (lis[i].getAttribute('class'));
-     phraseLetter = lis[i].textContent;
+     const phraseLetter = lis[i].textContent;
 
      if (attrValue === "letter") {
-         
          //  match found in pharse char with user selected char.
-         if (phraseLetter === letterBtnGuess) {
+         if (phraseLetter.toLowerCase() === letterBtnGuess.toLowerCase()) 
+         {
              lis[i].classList.add("show");
-             guess = true;
+             guess = lis[i];
          } 
-     } 
-  }
-   
-     if (guess) {
-        return phraseLetter;
-    }
-    //  no match found
-    else {
-        guess = false;
-        return null;
-    }
-
+      }    
+   }
+    return guess;
 }
 
 //function to check whether player wins or lose  game.
 function checkWin() {
-    // count no. of Lis with class letter.
     const lisCountClassLetter = ul.querySelectorAll('.letter');
-    //  count no. of Lis with class show.
     const lisCountClassShow = ul.querySelectorAll('.show');
 
-    if (lisCountClassLetter.length === lisCountClassShow.length) {
-         gameWin();
-    } else if(missed >= 5){
-        gameLose();
-    }
+        if (lisCountClassLetter.length === lisCountClassShow.length) {
+            gameWin();
+        } else if(missed >= 5){
+            gameLose();
+        }
 
 }
 
+//Style for h3 element, to display win or lose text at end of game.
+function createStyleHeading3() {
+    h3.style.fontFamily = 'Open Sans', 'sans-serif';
+    h3.style.fontSize = '30px';
+    h3.style.textTransform = 'capitalize';
+    h3.style.margin = 0;
+    startGameOverlay.appendChild(h3);
+}
+
 function gameWin() {
-    startGameOverlay.style.display = '';
-    startGameOverlay.classList.add('win');
-    btnResetGame.textContent = 'Play Again'
-    h3.textContent = "You Win!"
+   startGameOverlay.style.display = '';
+   startGameOverlay.className = 'win';
+   startGameOverlay.removeChild(btnResetGame);
+   startGameOverlay.appendChild(startOver);
+   createStyleHeading3();
+   startOver.textContent = 'Play Again'
+   startOver.classList.add('btn__reset');
+   h3.textContent = "You Win!"
+   
 }
 
 function gameLose() {
     startGameOverlay.style.display = '';
-    startGameOverlay.classList.add('lose');
-    btnResetGame.textContent = 'Try Again'
+    startGameOverlay.className = 'lose';
+    startGameOverlay.removeChild(btnResetGame);
+    startGameOverlay.appendChild(startOver);
+    createStyleHeading3();
+    startOver.textContent = 'Try Again'
+    startOver.classList.add('btn__reset');
     h3.textContent = "You Lose!"
+  
 }
+
+startOver.addEventListener('click', function(){
+    location.reload(true);
+});
 
 // ************************************ //
 //  Events and events delegations
@@ -130,11 +133,13 @@ function gameLose() {
 //to hide the start screen overlay
 btnResetGame.addEventListener('click', function() {
     startGameOverlay.style.display = 'none';
+    const phraseArray = getRandomPhraseAsArray(phrases);
+    console.log(phraseArray);
+    addPhraseToDisplay(phraseArray);
 });
 
 
 // Keypress Event on qwery keyboard
-
 qwertyKey.addEventListener("click", function(event) {
     const ol = document.querySelector('#scoreboard ol');
    
@@ -157,8 +162,6 @@ qwertyKey.addEventListener("click", function(event) {
     checkWin();
 });
 
-const phraseArray = getRandomPhraseAsArray(phrases);
-console.log(phraseArray);
-addPhraseToDisplay(phraseArray);
+
 
 
