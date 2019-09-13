@@ -4,6 +4,6 @@
 
 ** Treehouse | Front End Techdegree Project: 6 Game Show App **
 
-// VIEW PROJECT https://artisah.github.io/techdegree-project2-portfolio/
+// VIEW PROJECT https://artisah.github.io/techdegree-project6-game-show/
 
-INSTRUCTIONS : In this project you'll build a responsive, game show app. Using the supplied mockup files you'll build a mobile, tablet and desktop version of the website using media queries, and a "mobile-first" approach.
+INSTRUCTIONS : In this project you'll build a responsive, game show app mostly using vanilla javascript. Using the supplied mockup files you'll build a mobile, tablet and desktop version of the website using media queries, and a "mobile-first" approach.
